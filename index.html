@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///C:/Users/mirza/Downloads/gemini-code-1779531279887.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potassium Correction Pro | ResQ Notes</title>
+    <style>
+        :root {
+            --primary: #135e68; /* Teal from original theme */
+            --brand-red: #da1a21; /* Red matching the text from your last logo */
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            padding: 20px; 
+        }
+        .app-card { 
+            width: 100%; 
+            max-width: 450px; 
+            background: var(--card); 
+            padding: 2rem; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+        }
+        header { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+        }
+        .brand-heading {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--brand-red);
+            margin: 0 0 0.25rem 0;
+            letter-spacing: -0.5px;
+        }
+        .app-title { 
+            font-size: 1.25rem; 
+            margin: 0; 
+            color: var(--primary); 
+            font-weight: 600;
+        }
+        .author { 
+            font-size: 0.85rem; 
+            opacity: 0.7; 
+            margin-top: 5px;
+        }
+        
+        .input-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 2rem; 
+        }
+        label { 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            display: block; 
+            margin-bottom: 5px; 
+            opacity: 0.8; 
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            box-sizing: border-box; 
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .result-zone { 
+            background: var(--primary); 
+            color: white; 
+            padding: 2rem; 
+            border-radius: 16px; 
+            text-align: center; 
+        }
+        .result-label { 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            opacity: 0.9; 
+            letter-spacing: 0.5px;
+        }
+        .result-val { 
+            font-size: 3rem; 
+            font-weight: 800; 
+            margin: 10px 0; 
+        }
+        
+        .explanation { 
+            margin-top: 2rem; 
+            font-size: 0.9rem; 
+            line-height: 1.6; 
+        }
+        .explanation h3 { 
+            font-size: 0.9rem; 
+            margin: 1rem 0 0.5rem 0; 
+            color: var(--primary); 
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .group-link { 
+            text-align: center; 
+            margin-top: 1.5rem; 
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .group-link a { 
+            color: var(--primary); 
+            font-weight: 600; 
+            text-decoration: none; 
+        }
+        .group-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-card">
+    <header>
+        <h1 class="brand-heading">ResQ Notes</h1>
+        <h2 class="app-title">Corrected Potassium</h2>
+        <div class="author">By Dr. Mirza Shamim</div>
+    </header>
+
+    <div class="input-grid">
+        <div>
+            <label>Measured pH</label>
+            <input type="number" id="ph" step="0.01" value="7.40">
+        </div>
+        <div>
+            <label>Measured K+</label>
+            <input type="number" id="k" step="0.1" value="4.0">
+        </div>
+    </div>
+
+    <div class="result-zone">
+        <div class="result-label">ESTIMATED CORRECTED K+</div>
+        <div id="result" class="result-val">4.00</div>
+        <div id="status" style="font-size: 0.85rem;">Normal pH balance</div>
+    </div>
+
+    <div class="explanation">
+        <h3>The Clinical Logic</h3>
+        <p>Potassium levels shift based on pH to maintain electrochemical neutrality. This tool accounts for these transcellular shifts:</p>
+        <ul>
+            <li><strong>Acidosis (pH &lt; 7.4):</strong> K+ exits cells. We subtract 0.7 for every 0.1 pH decrease to find the true baseline.</li>
+            <li><strong>Alkalosis (pH &gt; 7.4):</strong> K+ enters cells. We add 0.3 for every 0.1 pH increase.</li>
+        </ul>
+        <p><strong>Note:</strong> Always treat the patient, not just the number. Use this for clinical guidance, not as a replacement for ECG findings.</p>
+    </div>
+
+    <div class="group-link">
+        <a href="https://www.facebook.com/groups/244391199758536" target="_blank">Join our Professional Group</a>
+    </div>
+</div>
+
+<script>
+    function update() {
+        const ph = parseFloat(document.getElementById('ph').value);
+        const k = parseFloat(document.getElementById('k').value);
+        const resEl = document.getElementById('result');
+        const statusEl = document.getElementById('status');
+        
+        // Handle invalid inputs gracefully
+        if (isNaN(ph) || isNaN(k)) {
+            resEl.innerText = "--";
+            statusEl.innerText = "Please enter valid numbers";
+            return;
+        }
+
+        let val = k;
+        let msg = "Normal pH balance";
+        
+        if (ph < 7.4) {
+            val = k - ((7.4 - ph) / 0.1 * 0.7);
+            msg = "Acidosis shift detected";
+        } else if (ph > 7.4) {
+            val = k + ((ph - 7.4) / 0.1 * 0.3);
+            msg = "Alkalosis shift detected";
+        }
+        
+        resEl.innerText = val.toFixed(2);
+        statusEl.innerText = msg;
+    }
+    
+    // Attach event listeners
+    document.querySelectorAll('input').forEach(i => i.addEventListener('input', update));
+</script>
+
+
+</body></html>
